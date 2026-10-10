@@ -1,0 +1,62 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:intermediary:${project.minecraft_version}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') {
+        expand 'version': inputs.properties.version
+    }
+}
+
+def generatedResources = layout.buildDirectory.dir('generated/clearlava-resources')
+sourceSets.main.resources.srcDir(generatedResources)
+
+tasks.register('generateLavaTextures', Exec) {
+    outputs.dir(generatedResources)
+    outputs.upToDateWhen { false }
+
+    doFirst {
+        def clientJarPath = providers.gradleProperty('clientJar').orNull
+        if (!clientJarPath) {
+            throw new GradleException('Provide a Minecraft 1.21.1 client JAR with -PclientJar=<path>.')
+        }
+
+        def clientJar = file(clientJarPath)
+        if (!clientJar.isFile()) {
+            throw new GradleException("Minecraft client JAR not found: ${clientJar}")
+        }
+
+        commandLine(
+            providers.gradleProperty('python').getOrElse('python'),
+            file('scripts/generate_lava_textures.py'),
+            '--client-jar', clientJar,
+            '--output-dir', generatedResources.get().asFile
+        )
+    }
+}
+
+processResources.dependsOn tasks.named('generateLavaTextures')
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}

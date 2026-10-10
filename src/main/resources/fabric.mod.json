@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "clearlava",
+  "version": "${version}",
+  "name": "ClearLava",
+  "description": "Makes lava translucent and lets you switch between lava and water fluid textures.",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.example.clearlava.ClearLavaMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "authors": [
+    "Clascheurduturfu"
+  ]
+}
