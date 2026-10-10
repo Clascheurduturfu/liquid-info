@@ -1,0 +1,6 @@
+{
+	"category.fluidlevels.main": "Fluid Levels",
+	"key.fluidlevels.toggle": "Toggle Fluid Level Display",
+	"key.fluidlevels.toggle_source_only": "Toggle Fluid Levels: Source Only (less lag)",
+	"key.fluidlevels.toggle_wool_mode": "Toggle Fluid Levels: Source Wool Mode"
+}

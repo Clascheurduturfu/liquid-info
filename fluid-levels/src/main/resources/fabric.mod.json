@@ -1,0 +1,21 @@
+{
+	"schemaVersion": 1,
+	"id": "fluidlevels",
+	"version": "${version}",
+	"name": "Fluid Levels",
+	"description": "Displays water and lava fluid levels in-world. Optional source-only mode for much better performance.",
+	"authors": ["FluidLevels"],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.fluidlevels.FluidLevelsClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.18.3",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

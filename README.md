@@ -1,46 +1,62 @@
-# ClearLava
+# Liquid Info
 
-A client-side Fabric mod for Minecraft 1.21.1 that makes lava translucent and lets you swap its fluid texture while you play.
+Liquid Info is a small collection of independent client-side Fabric mods for Minecraft 1.21.1. Install either mod on its own, or install both for translucent lava and quick in-world fluid information.
 
-## Features
+## Mods
 
-- Translucent lava rendering, with an option to restore the vanilla opaque render layer.
+### ClearLava — 1.0.1+mc1.21.1
+
+- Renders lava translucently.
 - Press **F9** to switch between the lava and water fluid textures.
-- Press **F4** to toggle opaque lava on or off.
-- Saves both choices in `config/clearlava.txt`.
+- Press **F4** to toggle the opaque lava render layer.
+- Saves preferences in config/clearlava.txt.
 
-The controls can be rebound in Minecraft's Controls menu. ClearLava runs on the client and does not need to be installed on a server.
+### Fluid Levels — 1.1.3+mc1.21.1-prod
+
+- Shows compact labels for water and lava fluid states around the player; source blocks use S.
+- Press **F7** to toggle the display.
+- Press **F5** to hide flowing-fluid labels in text mode. This does not change wool-marker mode.
+- Press **F6** to replace text labels with source markers: red wool for lava and blue wool for water.
+- Saves preferences in config/fluidlevels.json.
+
+All keybinds can be changed in Minecraft's Controls menu. F5 is also Minecraft's default perspective key, so rebind either action if needed. Both mods are client-side and do not need to be installed on a server. They are packaged as separate JARs and keep their original mod IDs and configuration paths.
 
 ## Requirements
 
-- Minecraft Java Edition **1.21.1**
-- Java **21**
-- Fabric Loader **0.15.0 or newer**
-- Fabric API
-- Python 3 and Pillow, only when building from source
+- Minecraft Java Edition 1.21.1
+- Java 21
+- Fabric Loader **0.18.3 or newer** and Fabric API
+- Python 3 and Pillow to generate ClearLava's textures when building from source
 
 ## Build
 
-The mod replaces Minecraft's lava texture resources with translucent variants. Those variants are generated locally from the Minecraft client JAR you provide; the game textures are not stored in this repository.
+ClearLava's translucent textures are generated locally from a Minecraft 1.21.1 client JAR that you provide. The game textures and client JAR are not stored in this repository. Fluid Levels uses Mojang's official mappings; ClearLava keeps its intermediary mappings. The root Gradle build task builds both mods; Fluid Levels can also be built independently.
 
-On Windows, from PowerShell:
+Install Python 3 and the pinned image dependency first:
 
-```powershell
-.\gradlew.bat build -PclientJar="C:\path\to\minecraft-client-1.21.1.jar"
-```
+~~~powershell
+python -m pip install -r requirements-build.txt
+~~~
+
+On Windows, build both mods from PowerShell with a local Minecraft 1.21.1 client JAR:
+
+~~~powershell
+.\gradlew.bat clean build -PclientJar="C:\path\to\minecraft-client-1.21.1.jar"
+~~~
 
 On macOS or Linux:
 
-```sh
-./gradlew build -PclientJar=/path/to/minecraft-client-1.21.1.jar
-```
+~~~sh
+python3 -m pip install -r requirements-build.txt
+./gradlew clean build -Ppython=python3 -PclientJar=/path/to/minecraft-client-1.21.1.jar
+~~~
 
-The client JAR must be for Minecraft 1.21.1 and contain `assets/minecraft/textures/block/lava_still.png` and `lava_flow.png`. Install Python 3 and the pinned image dependency first (`python -m pip install -r requirements-build.txt`). The build uses Fabric Loom to fetch the modding dependencies.
+To build only Fluid Levels, run :fluid-levels:build without the clientJar property. The root build task explicitly includes both mods. Gradle resolves Fabric Loom, Minecraft mappings, Loader, and API dependencies during the build.
 
-The output is written to `build/libs/`. Copy the ClearLava JAR into the `mods` folder of a Fabric 1.21.1 profile that also has Fabric API installed.
+The two mod JARs are written to build/libs/ and fluid-levels/build/libs/. Install the JAR or JARs you want in the mods folder of a Fabric 1.21.1 client profile with Fabric API installed.
 
-## Notes
+## Licensing and compatibility
 
-- ClearLava is an unofficial community project. It is not affiliated with or endorsed by Mojang Studios or Microsoft.
-- No open-source license is granted by this repository. All rights are reserved unless the author gives permission. Third-party tools and game assets remain subject to their own terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-- Compatibility with other rendering mods depends on their versions and configuration.
+The original ClearLava component has no open-source license grant in this repository. The Fluid Levels component's original Fabric metadata declares MIT and names FluidLevels as its author; its license is scoped to that component in the [fluid-levels/LICENSE](fluid-levels/LICENSE) file. See [third-party notices](THIRD_PARTY_NOTICES.md) for dependencies and Minecraft assets.
+
+Liquid Info is an unofficial community project and is not affiliated with or endorsed by Mojang Studios or Microsoft. Compatibility with other rendering mods depends on their versions and configuration.
